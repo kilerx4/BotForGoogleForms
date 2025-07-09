@@ -1,0 +1,18 @@
+{
+  "name": "google-form-bot",
+  "version": "1.0.0",
+  "main": "form_bot.js",
+  "description": "Бот для автоматического заполнения Google форм данными из Excel файла",
+  "keywords": ["google-forms", "automation", "excel", "puppeteer", "bot"],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "start": "node form_bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "puppeteer": "^24.12.0",
+    "string-similarity": "^4.0.4",
+    "xlsx": "^0.18.5"
+  }
+}
