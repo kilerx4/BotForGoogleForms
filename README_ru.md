@@ -1,5 +1,3 @@
-# BotForGoogleForms
-This bot automatically fills Google forms with data from an Excel file.
 Bot для автозаполнения Google форм
 
 Этот бот автоматически заполняет Google формы данными из Excel файла.
@@ -264,6 +262,15 @@ node form_bot.js 0 null true
 npm install
 
 Это автоматически установит все необходимые зависимости из package.json
+
+ФАЙЛ PACKAGE.JSON:
+
+Все необходимые модули указаны в файле package.json:
+- puppeteer (^24.12.0) - автоматизация браузера
+- xlsx (^0.18.5) - работа с Excel файлами
+- string-similarity (^4.0.4) - нечеткое сопоставление строк
+
+При выполнении npm install эти модули будут автоматически установлены.
 
 ПРОВЕРКА УСТАНОВКИ:
 
