@@ -1,337 +1,333 @@
-Bot для автозаполнения Google форм
+Google Form Auto-Fill Bot
 
-Этот бот автоматически заполняет Google формы данными из Excel файла.
+This bot automatically fills Google forms with data from Excel files.
 
-ВОЗМОЖНОСТИ
+FEATURES
 
-- Автоматическое заполнение Google форм данными из Excel
-- Умное сопоставление вопросов формы с колонками Excel
-- Поддержка различных типов вопросов (текст, выбор, множественный выбор)
-- Настраиваемые задержки между отправками
-- Возможность запуска в headless режиме
-- Обработка синонимов и похожих ответов
+- Automatic Google form filling with Excel data
+- Smart matching of form questions with Excel columns
+- Support for various question types (text, choice, multiple choice)
+- Configurable delays between submissions
+- Headless mode capability
+- Synonym and similar answer processing
 
-УСТАНОВКА
+INSTALLATION
 
-1. Убедитесь, что у вас установлен Node.js (версия 14 или выше)
-2. Клонируйте репозиторий
-3. Установите зависимости:
+1. Make sure you have Node.js installed (version 14 or higher)
+2. Clone the repository
+3. Install dependencies:
    npm install
 
-НАСТРОЙКА
+SETUP
 
-1. НАСТРОЙКА GOOGLE ФОРМЫ
+1. GOOGLE FORM SETUP
 
-1. Откройте файл form_bot.js
-2. Найдите строку с FORM_URL и замените YOUR_GOOGLE_FORM_URL_HERE на вашу ссылку Google формы:
+1. Open the form_bot.js file
+2. Find the FORM_URL line and replace YOUR_GOOGLE_FORM_URL_HERE with your Google form link:
    const FORM_URL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform';
 
-2. ПОДГОТОВКА EXCEL ФАЙЛА С ДАННЫМИ
+2. EXCEL FILE DATA PREPARATION
 
-Бот автоматически сопоставляет заголовки колонок Excel с вопросами в Google форме. Подготовьте Excel файл следующим образом:
+The bot automatically matches Excel column headers with Google form questions. Prepare your Excel file as follows:
 
-СТРУКТУРА EXCEL ФАЙЛА:
-- Заголовки колонок должны соответствовать вопросам в Google форме
-- Каждая строка - это один ответ на форму
-- Формат файла: .xlsx или .xls
+EXCEL FILE STRUCTURE:
+- Column headers should correspond to Google form questions
+- Each row is one form response
+- File format: .xlsx or .xls
 
-ПРИМЕР СТРУКТУРЫ EXCEL ФАЙЛА:
+EXCEL FILE STRUCTURE EXAMPLE:
 
-| Как часто вы пользуетесь платформой? | С какого устройства вы заходите? | Какие функции нужны в мобильном приложении? | Какие трудности испытываете? |
-|--------------------------------------|----------------------------------|---------------------------------------------|------------------------------|
-| Редко                                | Смартфон                         | Карта мероприятий, Запись на события        | Никакой логики               |
-| Часто                                | Компьютер                        | Уведомления, Поиск                          | Сложно найти информацию      |
+| How often do you use the platform? | What device do you access from? | What functions are needed in the mobile app? | What difficulties do you experience? |
+|------------------------------------|----------------------------------|---------------------------------------------|-------------------------------------|
+| Rarely                             | Smartphone                      | Event map, Event registration               | No logic                            |
+| Often                              | Computer                         | Notifications, Search                       | Hard to find information            |
 
-ПОДДЕРЖИВАЕМЫЕ ТИПЫ ВОПРОСОВ:
+SUPPORTED QUESTION TYPES:
 
-1. Вопросы с выбором (radio buttons):
-   - Частота использования: "Редко", "Часто", "Иногда", "Никогда"
-   - Устройство: "Смартфон", "Компьютер/ноутбук", "Планшет", "Другое"
-   - Доверие к платформе: "Полностью", "Частично", "Не доверяю"
+1. Choice questions (radio buttons):
+   - Usage frequency: "Rarely", "Often", "Sometimes", "Never"
+   - Device: "Smartphone", "Computer/laptop", "Tablet", "Other"
+   - Platform trust: "Completely", "Partially", "Don't trust"
 
-2. Текстовые поля:
-   - Функции в мобильном приложении
-   - Предложения по улучшению
-   - Дополнительные комментарии
+2. Text fields:
+   - Mobile app functions
+   - Improvement suggestions
+   - Additional comments
 
-3. Специальные сопоставления:
-   Бот автоматически сопоставляет ответы с вариантами в форме:
+3. Special mappings:
+   The bot automatically maps answers to form options:
 
-   // Примеры автоматических сопоставлений
-   'редко' → 'Раз в месяц' / 'Реже одного раза в месяц'
-   'смартфон' → 'Телефон'
-   'whatsapp' → 'Социальные сети'
-   'актуальная' → 'Всегда актуальна'
+   // Examples of automatic mappings
+   'rarely' → 'Once a month' / 'Less than once a month'
+   'smartphone' → 'Phone'
+   'whatsapp' → 'Social networks'
+   'current' → 'Always current'
 
-ВАЖНЫЕ МОМЕНТЫ:
+IMPORTANT NOTES:
 
-1. Заголовки колонок должны быть максимально похожи на вопросы в форме
-2. Пустые значения пропускаются (кроме специальных случаев)
-3. Служебные колонки (например, "Отметка времени") автоматически пропускаются
-4. Обязательные вопросы (с звездочкой *) заполняются автоматически, если не найдено соответствие
+1. Column headers should be as similar as possible to form questions
+2. Empty values are skipped (except for special cases)
+3. Service columns (e.g., "Timestamp") are automatically skipped
+4. Required questions (with asterisk *) are filled automatically if no match is found
 
-ПРИМЕРЫ НАЗВАНИЙ КОЛОНОК:
+COLUMN NAME EXAMPLES:
 
-- "Как часто вы пользуетесь платформой?"
-- "С какого устройства вы заходите?"
-- "Какие функции нужны в мобильном приложении?"
-- "Какие трудности испытываете при использовании?"
-- "Что могло бы мотивировать вас использовать платформу чаще?"
-- "Как вы оцениваете актуальность информации?"
-- "Какие каналы для уведомлений предпочитаете?"
-- "Доверяете ли вы платформе?"
-- "Испытывали ли вы технические трудности?"
+- "How often do you use the platform?"
+- "What device do you access from?"
+- "What functions are needed in the mobile app?"
+- "What difficulties do you experience when using?"
+- "What could motivate you to use the platform more often?"
+- "How do you rate the relevance of information?"
+- "What notification channels do you prefer?"
+- "Do you trust the platform?"
+- "Have you experienced technical difficulties?"
 
-3. НАСТРОЙКА ФАЙЛА ДАННЫХ
+3. DATA FILE SETUP
 
-По умолчанию используется файл moscow_sport_data.xlsx. Чтобы использовать свой файл:
+By default, moscow_sport_data.xlsx is used. To use your own file:
 
-1. Замените moscow_sport_data.xlsx на ваш файл
-2. Или измените путь в коде:
+1. Replace moscow_sport_data.xlsx with your file
+2. Or change the path in the code:
    const EXCEL_FILE = path.join(__dirname, 'your_data_file.xlsx');
 
-4. СОЗДАНИЕ GOOGLE ФОРМЫ
+4. CREATING GOOGLE FORM
 
-РЕКОМЕНДУЕМАЯ СТРУКТУРА GOOGLE ФОРМЫ:
+RECOMMENDED GOOGLE FORM STRUCTURE:
 
-1. Вопросы с выбором одного варианта (Radio buttons):
+1. Single choice questions (Radio buttons):
 
-   Вопрос: "Как часто вы пользуетесь платформой?"
-   Варианты ответов:
-   - Ежедневно
-   - Несколько раз в неделю  
-   - Раз в месяц
-   - Реже одного раза в месяц
-   - Впервые
+   Question: "How often do you use the platform?"
+   Answer options:
+   - Daily
+   - Several times a week
+   - Once a month
+   - Less than once a month
+   - First time
 
-   Вопрос: "С какого устройства вы заходите?"
-   Варианты ответов:
-   - Телефон
-   - Компьютер/ноутбук
-   - Планшет
-   - Другое
+   Question: "What device do you access from?"
+   Answer options:
+   - Phone
+   - Computer/laptop
+   - Tablet
+   - Other
 
-2. Текстовые поля:
+2. Text fields:
 
-   Вопрос: "Какие функции нужны в мобильном приложении?"
-   Тип: Короткий текст или Длинный текст
+   Question: "What functions are needed in the mobile app?"
+   Type: Short text or Long text
 
-   Вопрос: "Какие изменения хотели бы видеть в платформе?"
-   Тип: Длинный текст
+   Question: "What changes would you like to see in the platform?"
+   Type: Long text
 
-3. Вопросы с множественным выбором:
+3. Multiple choice questions:
 
-   Вопрос: "Какие каналы для уведомлений предпочитаете?"
-   Варианты ответов:
+   Question: "What notification channels do you prefer?"
+   Answer options:
    - Email
    - SMS
-   - Push-уведомления
-   - Социальные сети
-   - Другое
+   - Push notifications
+   - Social networks
+   - Other
 
-НАСТРОЙКИ GOOGLE ФОРМЫ:
+GOOGLE FORM SETTINGS:
 
-1. Создайте форму на forms.google.com
-2. Добавьте вопросы в соответствии с вашими данными
-3. Настройте обязательные вопросы (поставьте звездочку *)
-4. Получите ссылку для заполнения (кнопка "Отправить" → "Ссылка")
-5. Вставьте ссылку в код бота
+1. Create a form at forms.google.com
+2. Add questions according to your data
+3. Set required questions (add asterisk *)
+4. Get the fill link (Send button → Link)
+5. Insert the link into the bot code
 
-ПРИМЕР ПОЛНОЙ GOOGLE ФОРМЫ:
+COMPLETE GOOGLE FORM EXAMPLE:
 
-1. Как часто вы пользуетесь платформой? *
-   ○ Ежедневно
-   ○ Несколько раз в неделю
-   ○ Раз в месяц
-   ○ Реже одного раза в месяц
-   ○ Впервые
+1. How often do you use the platform? *
+   ○ Daily
+   ○ Several times a week
+   ○ Once a month
+   ○ Less than once a month
+   ○ First time
 
-2. С какого устройства вы заходите? *
-   ○ Телефон
-   ○ Компьютер/ноутбук
-   ○ Планшет
-   ○ Другое
+2. What device do you access from? *
+   ○ Phone
+   ○ Computer/laptop
+   ○ Tablet
+   ○ Other
 
-3. Какие функции нужны в мобильном приложении?
-   [Текстовое поле]
+3. What functions are needed in the mobile app?
+   [Text field]
 
-4. Какие трудности испытываете при использовании? *
-   ○ Нужную информацию сложно найти
-   ○ Слишком много пунктов меню
-   ○ Непонятны названия разделов
-   ○ Другое
+4. What difficulties do you experience when using? *
+   ○ Hard to find needed information
+   ○ Too many menu items
+   ○ Unclear section names
+   ○ Other
 
-5. Что могло бы мотивировать вас использовать платформу чаще?
-   ○ Система бонусов
-   ○ Персональные рекомендации
-   ○ Упрощение процесса
-   ○ Другое
+5. What could motivate you to use the platform more often?
+   ○ Bonus system
+   ○ Personal recommendations
+   ○ Process simplification
+   ○ Other
 
-6. Как вы оцениваете актуальность информации? *
-   ○ Всегда актуальна
-   ○ Иногда устаревшая
-   ○ Часто не соответствует действительности
-   ○ Иногда не хватает деталей
+6. How do you rate the relevance of information? *
+   ○ Always current
+   ○ Sometimes outdated
+   ○ Often doesn't match reality
+   ○ Sometimes lacks details
 
-7. Какие каналы для уведомлений предпочитаете?
+7. What notification channels do you prefer?
    ○ Email
    ○ SMS
-   ○ Push-уведомления
-   ○ Социальные сети
-   ○ Другое
+   ○ Push notifications
+   ○ Social networks
+   ○ Other
 
-8. Доверяете ли вы платформе? *
-   ○ Полностью
-   ○ Частично
-   ○ Не доверяю
+8. Do you trust the platform? *
+   ○ Completely
+   ○ Partially
+   ○ Don't trust
 
-9. Испытывали ли вы технические трудности?
-   ○ Периодически вылетает
-   ○ Часто зависает
-   ○ Интерфейс неудобный
-   ○ Других особенностей
-   ○ Нет проблем
+9. Have you experienced technical difficulties?
+   ○ Periodically crashes
+   ○ Often freezes
+   ○ Uncomfortable interface
+   ○ Other features
+   ○ No problems
 
-10. Какие изменения хотели бы видеть в платформе?
-    [Длинное текстовое поле]
+10. What changes would you like to see in the platform?
+    [Long text field]
 
-ИСПОЛЬЗОВАНИЕ
+USAGE
 
-ЧЕРЕЗ КОМАНДНУЮ СТРОКУ:
+VIA COMMAND LINE:
    node form_bot.js [START_ROW] [MAX_ROWS] [HEADLESS]
 
-ЧЕРЕЗ BAT ФАЙЛ (WINDOWS):
-   Отредактируйте run_bot.bat и запустите его.
+VIA BAT FILE (WINDOWS):
+   Edit run_bot.bat and run it.
 
-ПАРАМЕТРЫ:
-- START_ROW - начальная строка Excel (по умолчанию 0)
-- MAX_ROWS - максимальное количество строк для обработки (по умолчанию все)
-- HEADLESS - запуск в фоновом режиме (true/false, по умолчанию false)
+PARAMETERS:
+- START_ROW - starting Excel row (default 0)
+- MAX_ROWS - maximum number of rows to process (default all)
+- HEADLESS - background mode (true/false, default false)
 
-ПРИМЕРЫ ЗАПУСКА:
+LAUNCH EXAMPLES:
 
-# Обработать все строки, начиная с первой
+# Process all rows starting from the first
 node form_bot.js 0
 
-# Обработать только первые 10 строк
+# Process only first 10 rows
 node form_bot.js 0 10
 
-# Запустить в фоновом режиме
+# Run in background mode
 node form_bot.js 0 null true
 
-СТРУКТУРА ПРОЕКТА
+PROJECT STRUCTURE
 
-- form_bot.js - основной файл бота
-- moscow_sport_data.xlsx - файл с данными для заполнения
-- run_bot.bat - скрипт для быстрого запуска на Windows
-- package.json - зависимости проекта
+- form_bot.js - main bot file
+- moscow_sport_data.xlsx - data file for filling
+- run_bot.bat - quick launch script for Windows
+- package.json - project dependencies
 
-ТРЕБОВАНИЯ
+REQUIREMENTS
 
 - Node.js 14+
-- Excel файл с данными
+- Excel data file
 
-ЗАВИСИМОСТИ И МОДУЛИ
+DEPENDENCIES AND MODULES
 
-Бот использует следующие npm пакеты (устанавливаются автоматически):
+The bot uses the following npm packages (installed automatically):
 
 1. puppeteer (^24.12.0)
-   - Автоматизация браузера Chrome/Chromium
-   - Взаимодействие с веб-страницами
-   - Заполнение форм и отправка данных
+   - Chrome/Chromium browser automation
+   - Web page interaction
+   - Form filling and data submission
 
 2. xlsx (^0.18.5)
-   - Чтение и парсинг Excel файлов (.xlsx, .xls)
-   - Преобразование данных в JSON формат
-   - Поддержка различных форматов таблиц
+   - Reading and parsing Excel files (.xlsx, .xls)
+   - Converting data to JSON format
+   - Support for various table formats
 
 3. string-similarity (^4.0.4)
-   - Алгоритмы нечеткого сопоставления строк
-   - Умное сопоставление вопросов Excel с вопросами формы
-   - Обработка синонимов и похожих ответов
+   - Fuzzy string matching algorithms
+   - Smart matching of Excel questions with form questions
+   - Synonym and similar answer processing
 
-ПРИМЕЧАНИЕ ПО PUPPETEER:
+PUPPETEER NOTE:
 
-При первом запуске Puppeteer автоматически скачает браузер Chromium (~200MB).
-Это происходит только один раз при установке. Если у вас медленный интернет,
-может потребоваться некоторое время для загрузки.
+On first run, Puppeteer will automatically download Chromium browser (~200MB).
+This happens only once during installation. If you have slow internet,
+it may take some time to download.
 
-УСТАНОВКА МОДУЛЕЙ:
+MODULE INSTALLATION:
 
-После клонирования репозитория выполните:
+After cloning the repository, run:
 npm install
 
-Это автоматически установит все необходимые зависимости из package.json
+This will automatically install all necessary dependencies from package.json
 
-ФАЙЛ PACKAGE.JSON:
+PACKAGE.JSON FILE:
 
-Все необходимые модули указаны в файле package.json:
-- puppeteer (^24.12.0) - автоматизация браузера
-- xlsx (^0.18.5) - работа с Excel файлами
-- string-similarity (^4.0.4) - нечеткое сопоставление строк
+All necessary modules are listed in package.json:
+- puppeteer (^24.12.0) - browser automation
+- xlsx (^0.18.5) - Excel file handling
+- string-similarity (^4.0.4) - fuzzy string matching
 
-При выполнении npm install эти модули будут автоматически установлены.
+These modules will be automatically installed when running npm install.
 
-ПРОВЕРКА УСТАНОВКИ:
+INSTALLATION CHECK:
 
-Чтобы убедиться, что все модули установлены корректно:
+To make sure all modules are installed correctly:
 npm list
 
-Или проверить конкретный модуль:
+Or check a specific module:
 npm list puppeteer
 npm list xlsx
 npm list string-similarity
 
-ОБНОВЛЕНИЕ МОДУЛЕЙ:
+MODULE UPDATES:
 
-Для обновления модулей до последних версий:
+To update modules to latest versions:
 npm update
 
-Для обновления конкретного модуля:
+To update a specific module:
 npm update puppeteer
 
-БЕЗОПАСНОСТЬ
+SECURITY
 
-⚠️ ВАЖНО: Не публикуйте ссылки на ваши Google формы в публичных репозиториях. Всегда используйте placeholder значения в коде.
+⚠️ IMPORTANT: Do not publish links to your Google forms in public repositories. Always use placeholder values in code.
 
-ОТЛАДКА И УСТРАНЕНИЕ ПРОБЛЕМ
+DEBUGGING AND TROUBLESHOOTING
 
-ЧАСТЫЕ ПРОБЛЕМЫ:
+COMMON PROBLEMS:
 
-1. Бот не находит вопросы в форме:
-   - Убедитесь, что ссылка на форму корректная
-   - Проверьте, что форма доступна для заполнения
-   - Попробуйте запустить в режиме headless=false для отладки
+1. Bot doesn't find questions in form:
+   - Make sure the form link is correct
+   - Check that the form is accessible for filling
+   - Try running in headless=false mode for debugging
 
-2. Неправильное сопоставление ответов:
-   - Проверьте, что заголовки колонок Excel похожи на вопросы в форме
-   - Убедитесь, что варианты ответов в Excel соответствуют вариантам в форме
-   - Используйте точные названия вариантов из формы
+2. Incorrect answer matching:
+   - Check that Excel column headers are similar to form questions
+   - Make sure Excel answer options match form options
+   - Use exact option names from the form
 
-3. Бот не заполняет обязательные поля:
-   - Убедитесь, что в форме есть звездочки (*) для обязательных вопросов
-   - Проверьте, что данные в Excel не пустые для обязательных полей
+3. Bot doesn't fill required fields:
+   - Make sure there are asterisks (*) for required questions in the form
+   - Check that Excel data is not empty for required fields
 
-4. Ошибки при отправке формы:
-   - Увеличьте задержки между отправками
-   - Проверьте интернет-соединение
-   - Попробуйте запустить в обычном режиме (не headless)
+4. Form submission errors:
+   - Increase delays between submissions
+   - Check internet connection
+   - Try running in normal mode (not headless)
 
-ЛОГИ И ОТЛАДКА:
+LOGS AND DEBUGGING:
 
-Бот выводит подробные логи в консоль:
-- 🔍 - поиск элементов
-- ✅ - успешные операции
-- ❌ - ошибки
-- 🎯 - сопоставления
-- 📝 - заполнение полей
+The bot outputs detailed logs to console:
+- 🔍 - element search
+- ✅ - successful operations
+- ❌ - errors
+- 🎯 - matches
+- 📝 - field filling
 
-НАСТРОЙКА ЗАДЕРЖЕК:
+DELAY SETTINGS:
 
-const DELAY_BETWEEN = [2000, 4000]; // Задержка между отправками (мс)
+const DELAY_BETWEEN = [2000, 4000]; // Delay between submissions (ms)
 
-Увеличьте значения, если форма не успевает обрабатывать запросы.
-
-ЛИЦЕНЗИЯ
-
-ISC 
+Increase values if the form doesn't have time to process requests.
