@@ -1,0 +1,333 @@
+Google Form Auto-Fill Bot
+
+This bot automatically fills Google forms with data from Excel files.
+
+FEATURES
+
+- Automatic Google form filling with Excel data
+- Smart matching of form questions with Excel columns
+- Support for various question types (text, choice, multiple choice)
+- Configurable delays between submissions
+- Headless mode capability
+- Synonym and similar answer processing
+
+INSTALLATION
+
+1. Make sure you have Node.js installed (version 14 or higher)
+2. Clone the repository
+3. Install dependencies:
+   npm install
+
+SETUP
+
+1. GOOGLE FORM SETUP
+
+1. Open the form_bot.js file
+2. Find the FORM_URL line and replace YOUR_GOOGLE_FORM_URL_HERE with your Google form link:
+   const FORM_URL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform';
+
+2. EXCEL FILE DATA PREPARATION
+
+The bot automatically matches Excel column headers with Google form questions. Prepare your Excel file as follows:
+
+EXCEL FILE STRUCTURE:
+- Column headers should correspond to Google form questions
+- Each row is one form response
+- File format: .xlsx or .xls
+
+EXCEL FILE STRUCTURE EXAMPLE:
+
+| How often do you use the platform? | What device do you access from? | What functions are needed in the mobile app? | What difficulties do you experience? |
+|------------------------------------|----------------------------------|---------------------------------------------|-------------------------------------|
+| Rarely                             | Smartphone                      | Event map, Event registration               | No logic                            |
+| Often                              | Computer                         | Notifications, Search                       | Hard to find information            |
+
+SUPPORTED QUESTION TYPES:
+
+1. Choice questions (radio buttons):
+   - Usage frequency: "Rarely", "Often", "Sometimes", "Never"
+   - Device: "Smartphone", "Computer/laptop", "Tablet", "Other"
+   - Platform trust: "Completely", "Partially", "Don't trust"
+
+2. Text fields:
+   - Mobile app functions
+   - Improvement suggestions
+   - Additional comments
+
+3. Special mappings:
+   The bot automatically maps answers to form options:
+
+   // Examples of automatic mappings
+   'rarely' → 'Once a month' / 'Less than once a month'
+   'smartphone' → 'Phone'
+   'whatsapp' → 'Social networks'
+   'current' → 'Always current'
+
+IMPORTANT NOTES:
+
+1. Column headers should be as similar as possible to form questions
+2. Empty values are skipped (except for special cases)
+3. Service columns (e.g., "Timestamp") are automatically skipped
+4. Required questions (with asterisk *) are filled automatically if no match is found
+
+COLUMN NAME EXAMPLES:
+
+- "How often do you use the platform?"
+- "What device do you access from?"
+- "What functions are needed in the mobile app?"
+- "What difficulties do you experience when using?"
+- "What could motivate you to use the platform more often?"
+- "How do you rate the relevance of information?"
+- "What notification channels do you prefer?"
+- "Do you trust the platform?"
+- "Have you experienced technical difficulties?"
+
+3. DATA FILE SETUP
+
+By default, moscow_sport_data.xlsx is used. To use your own file:
+
+1. Replace moscow_sport_data.xlsx with your file
+2. Or change the path in the code:
+   const EXCEL_FILE = path.join(__dirname, 'your_data_file.xlsx');
+
+4. CREATING GOOGLE FORM
+
+RECOMMENDED GOOGLE FORM STRUCTURE:
+
+1. Single choice questions (Radio buttons):
+
+   Question: "How often do you use the platform?"
+   Answer options:
+   - Daily
+   - Several times a week
+   - Once a month
+   - Less than once a month
+   - First time
+
+   Question: "What device do you access from?"
+   Answer options:
+   - Phone
+   - Computer/laptop
+   - Tablet
+   - Other
+
+2. Text fields:
+
+   Question: "What functions are needed in the mobile app?"
+   Type: Short text or Long text
+
+   Question: "What changes would you like to see in the platform?"
+   Type: Long text
+
+3. Multiple choice questions:
+
+   Question: "What notification channels do you prefer?"
+   Answer options:
+   - Email
+   - SMS
+   - Push notifications
+   - Social networks
+   - Other
+
+GOOGLE FORM SETTINGS:
+
+1. Create a form at forms.google.com
+2. Add questions according to your data
+3. Set required questions (add asterisk *)
+4. Get the fill link (Send button → Link)
+5. Insert the link into the bot code
+
+COMPLETE GOOGLE FORM EXAMPLE:
+
+1. How often do you use the platform? *
+   ○ Daily
+   ○ Several times a week
+   ○ Once a month
+   ○ Less than once a month
+   ○ First time
+
+2. What device do you access from? *
+   ○ Phone
+   ○ Computer/laptop
+   ○ Tablet
+   ○ Other
+
+3. What functions are needed in the mobile app?
+   [Text field]
+
+4. What difficulties do you experience when using? *
+   ○ Hard to find needed information
+   ○ Too many menu items
+   ○ Unclear section names
+   ○ Other
+
+5. What could motivate you to use the platform more often?
+   ○ Bonus system
+   ○ Personal recommendations
+   ○ Process simplification
+   ○ Other
+
+6. How do you rate the relevance of information? *
+   ○ Always current
+   ○ Sometimes outdated
+   ○ Often doesn't match reality
+   ○ Sometimes lacks details
+
+7. What notification channels do you prefer?
+   ○ Email
+   ○ SMS
+   ○ Push notifications
+   ○ Social networks
+   ○ Other
+
+8. Do you trust the platform? *
+   ○ Completely
+   ○ Partially
+   ○ Don't trust
+
+9. Have you experienced technical difficulties?
+   ○ Periodically crashes
+   ○ Often freezes
+   ○ Uncomfortable interface
+   ○ Other features
+   ○ No problems
+
+10. What changes would you like to see in the platform?
+    [Long text field]
+
+USAGE
+
+VIA COMMAND LINE:
+   node form_bot.js [START_ROW] [MAX_ROWS] [HEADLESS]
+
+VIA BAT FILE (WINDOWS):
+   Edit run_bot.bat and run it.
+
+PARAMETERS:
+- START_ROW - starting Excel row (default 0)
+- MAX_ROWS - maximum number of rows to process (default all)
+- HEADLESS - background mode (true/false, default false)
+
+LAUNCH EXAMPLES:
+
+# Process all rows starting from the first
+node form_bot.js 0
+
+# Process only first 10 rows
+node form_bot.js 0 10
+
+# Run in background mode
+node form_bot.js 0 null true
+
+PROJECT STRUCTURE
+
+- form_bot.js - main bot file
+- moscow_sport_data.xlsx - data file for filling
+- run_bot.bat - quick launch script for Windows
+- package.json - project dependencies
+
+REQUIREMENTS
+
+- Node.js 14+
+- Excel data file
+
+DEPENDENCIES AND MODULES
+
+The bot uses the following npm packages (installed automatically):
+
+1. puppeteer (^24.12.0)
+   - Chrome/Chromium browser automation
+   - Web page interaction
+   - Form filling and data submission
+
+2. xlsx (^0.18.5)
+   - Reading and parsing Excel files (.xlsx, .xls)
+   - Converting data to JSON format
+   - Support for various table formats
+
+3. string-similarity (^4.0.4)
+   - Fuzzy string matching algorithms
+   - Smart matching of Excel questions with form questions
+   - Synonym and similar answer processing
+
+PUPPETEER NOTE:
+
+On first run, Puppeteer will automatically download Chromium browser (~200MB).
+This happens only once during installation. If you have slow internet,
+it may take some time to download.
+
+MODULE INSTALLATION:
+
+After cloning the repository, run:
+npm install
+
+This will automatically install all necessary dependencies from package.json
+
+PACKAGE.JSON FILE:
+
+All necessary modules are listed in package.json:
+- puppeteer (^24.12.0) - browser automation
+- xlsx (^0.18.5) - Excel file handling
+- string-similarity (^4.0.4) - fuzzy string matching
+
+These modules will be automatically installed when running npm install.
+
+INSTALLATION CHECK:
+
+To make sure all modules are installed correctly:
+npm list
+
+Or check a specific module:
+npm list puppeteer
+npm list xlsx
+npm list string-similarity
+
+MODULE UPDATES:
+
+To update modules to latest versions:
+npm update
+
+To update a specific module:
+npm update puppeteer
+
+SECURITY
+
+⚠️ IMPORTANT: Do not publish links to your Google forms in public repositories. Always use placeholder values in code.
+
+DEBUGGING AND TROUBLESHOOTING
+
+COMMON PROBLEMS:
+
+1. Bot doesn't find questions in form:
+   - Make sure the form link is correct
+   - Check that the form is accessible for filling
+   - Try running in headless=false mode for debugging
+
+2. Incorrect answer matching:
+   - Check that Excel column headers are similar to form questions
+   - Make sure Excel answer options match form options
+   - Use exact option names from the form
+
+3. Bot doesn't fill required fields:
+   - Make sure there are asterisks (*) for required questions in the form
+   - Check that Excel data is not empty for required fields
+
+4. Form submission errors:
+   - Increase delays between submissions
+   - Check internet connection
+   - Try running in normal mode (not headless)
+
+LOGS AND DEBUGGING:
+
+The bot outputs detailed logs to console:
+- 🔍 - element search
+- ✅ - successful operations
+- ❌ - errors
+- 🎯 - matches
+- 📝 - field filling
+
+DELAY SETTINGS:
+
+const DELAY_BETWEEN = [2000, 4000]; // Delay between submissions (ms)
+
+Increase values if the form doesn't have time to process requests.
